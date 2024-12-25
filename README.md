@@ -21,71 +21,33 @@ blog/
 └── static_blog_generator.py  # 生成器脚本
 ```
 
-## 本地开发
+## 初始设置
 
-1. 克隆仓库
+### 1. 环境准备
 ```bash
-git clone git@github.com:shisuiyi/shisuiyi.github.io.git
-cd shisuiyi.github.io
-```
-
-2. 安装依赖
-```bash
+# 安装依赖
 pip install pyyaml markdown pygments
-```
 
-3. 生成静态文件
-```bash
-python blog/static_blog_generator.py
-```
-
-## 部署流程
-
-### 首次部署
-
-1. 确保已安装 Git 并配置 SSH 密钥
-```bash
+# 配置 Git
 git config --global user.name "shisuiyi"
 git config --global user.email "你的邮箱"
 ```
 
-2. 初始化仓库
+### 2. 获取代码
 ```bash
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin git@github.com:shisuiyi/shisuiyi.github.io.git
-git push -u origin main
-```
+# 克隆源码仓库
+git clone git@github.com:shisuiyi/blog-source.git
+cd blog-source
 
-3. 给部署脚本添加执行权限
-```bash
+# 给部署脚本添加执行权限
 chmod +x deploy.sh
-```
-
-4. 执行部署
-```bash
-./deploy.sh
-```
-
-### 日常更新
-
-1. 更新博客内容后，提交源代码到 blog-source 仓库：
-```bash
-git add .
-git commit -m "更新说明"
-git push origin main
-```
-
-2. 部署到 GitHub Pages：
-```bash
-./deploy.sh
 ```
 
 ## 写作指南
 
-1. 在 `blog/posts/` 目录下创建 `.md` 文件
-2. 文件开头添加 YAML 格式的元数据：
+### 1. 创建新文章
+- 在 `blog/posts/` 目录下创建 `.md` 文件
+- 添加文章元数据：
 ```yaml
 ---
 title: 文章标题
@@ -93,13 +55,54 @@ date: YYYY-MM-DD
 tags: [标签1, 标签2]
 ---
 ```
-3. 使用 Markdown 语法编写文章内容
-4. 执行 `./deploy.sh` 部署更新
+- 使用 Markdown 语法编写内容
+
+### 2. 本地预览
+```bash
+# 生成静态文件
+python blog/static_blog_generator.py
+
+# 可以使用 Python 的 http 服务器预览
+python -m http.server --directory blog/public 8000
+# 然后访问 http://localhost:8000
+```
+
+## 部署流程
+
+### 1. 提交源码更新
+```bash
+# 添加更改
+git add .
+
+# 提交更改
+git commit -m "更新说明"
+
+# 推送到源码仓库
+git push origin main
+```
+
+### 2. 部署到 GitHub Pages
+```bash
+# 执行部署脚本
+./deploy.sh
+```
 
 ## 自动部署
 
-本项目配置了 GitHub Actions，当推送到 main 分支时会自动部署。
-配置文件位于 `.github/workflows/deploy.yml`。
+本项目配置了 GitHub Actions：
+- 当推送到 main 分支时自动部署
+- 配置文件：`.github/workflows/deploy.yml`
+- 部署目标：`shisuiyi.github.io`
+
+## 仓库说明
+
+- 源码仓库：`github.com/shisuiyi/blog-source`
+  - 存放博客源代码
+  - 包含模板、样式、文章等
+
+- 部署仓库：`github.com/shisuiyi/shisuiyi.github.io`
+  - 存放生成的静态文件
+  - 通过 GitHub Pages 提供访问
 
 ## 文件说明
 

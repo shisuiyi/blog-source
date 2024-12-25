@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="search-section">
+    <div class="search-container">
+        <div class="search-box">
+            <div class="search-field">
+                <span class="material-icons-round">search</span>
+                <input type="text" id="searchInput" placeholder="搜索文章..." class="search-input">
+            </div>
+        </div>
+        <div class="sort-box">
+            <div class="select-field">
+                <select id="sortSelect" class="sort-select">
+                    <option value="date-desc">最新发布</option>
+                    <option value="date-asc">最早发布</option>
+                    <option value="title-asc">标题 A-Z</option>
+                    <option value="title-desc">标题 Z-A</option>
+                </select>
+                <span class="material-icons-round">expand_more</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="posts-list" id="postsList">
+    {% for post in posts %}
+    <article class="post-preview" 
+             data-title="{{ post.title }}" 
+             data-date="{{ post.date }}"
+             data-content="{{ post.excerpt }}">
+        <div class="post-preview-container">
+            <div class="post-preview-image">
+                {% if post.image %}
+                <img src="{{ post.image }}" alt="{{ post.title }}">
+                {% else %}
+                <div class="post-preview-image-placeholder">
+                    <span>📝</span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="post-preview-content">
+                <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+                <div class="post-meta">
+                    <time>{{ post.date }}</time>
+                    {% if post.read_time %}
+                    <span class="read-time">{{ post.read_time }} min read</span>
+                    {% endif %}
+                </div>
+                {% if post.excerpt %}
+                <div class="post-excerpt">{{ post.excerpt }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </article>
+    {% endfor %}
+</div>
+
+<div class="no-results" id="noResults" style="display: none;">
+    <span class="material-icons-round">search_off</span>
+    <p>没有找到匹配的文章</p>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const sortSelect = document.getElementById('sortSelect');
+    const postsList = document.getElementById('postsList');
+    const noResults = document.getElementById('noResults');
+    const posts = Array.from(document.querySelectorAll('.post-preview'));
+
+    function filterAndSortPosts() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const sortValue = sortSelect.value;
+        
+        // 过滤文章
+        const filteredPosts = posts.filter(post => {
+            const title = post.getAttribute('data-title').toLowerCase();
+            const content = post.getAttribute('data-content').toLowerCase();
+            return title.includes(searchTerm) || content.includes(searchTerm);
+        });
+
+        // 排序文章
+        filteredPosts.sort((a, b) => {
+            const aTitle = a.getAttribute('data-title');
+            const bTitle = b.getAttribute('data-title');
+            const aDate = new Date(a.getAttribute('data-date'));
+            const bDate = new Date(b.getAttribute('data-date'));
+
+            switch(sortValue) {
+                case 'date-desc':
+                    return bDate - aDate;
+                case 'date-asc':
+                    return aDate - bDate;
+                case 'title-asc':
+                    return aTitle.localeCompare(bTitle);
+                case 'title-desc':
+                    return bTitle.localeCompare(aTitle);
+                default:
+                    return 0;
+            }
+        });
+
+        // 更新显示
+        postsList.innerHTML = '';
+        if (filteredPosts.length > 0) {
+            filteredPosts.forEach(post => postsList.appendChild(post));
+            postsList.style.display = 'block';
+            noResults.style.display = 'none';
+        } else {
+            postsList.style.display = 'none';
+            noResults.style.display = 'block';
+        }
+    }
+
+    // 添加事件监听器
+    searchInput.addEventListener('input', filterAndSortPosts);
+    sortSelect.addEventListener('change', filterAndSortPosts);
+});
+</script>
+{% endblock %} 

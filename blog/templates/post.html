@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} - {{ config.site.title }}{% endblock %}
+
+{% block content %}
+<div class="post-layout">
+    {% if post.toc %}
+    <aside class="post-toc">
+        <div class="toc-title">目录</div>
+        {{ post.toc|safe }}
+    </aside>
+    {% endif %}
+    
+    <article class="post">
+        <h1>{{ post.title }}</h1>
+        <div class="post-meta">
+            <time>{{ post.date }}</time>
+        </div>
+        
+        <div class="post-content">
+            {% if post.content %}
+            {{ post.content|replace('<div class="post-toc">.*?</div>', '', 1)|safe }}
+            {% endif %}
+        </div>
+    </article>
+</div>
+{% endblock %} 

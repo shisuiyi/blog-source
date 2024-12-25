@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}标签 - {{ config.site.title }}{% endblock %}
+
+{% block content %}
+<div class="tags-page">
+    <h1>标签云</h1>
+    <div class="tags-cloud">
+        {% for tag, posts in tags.items() %}
+        <a href="#{{ tag }}" class="tag-item" style="font-size: {{ 0.9 + posts|length * 0.1 }}rem">
+            {{ tag }} <span class="tag-count">{{ posts|length }}</span>
+        </a>
+        {% endfor %}
+    </div>
+    
+    <div class="tags-list">
+        {% for tag, posts in tags.items() %}
+        <section id="{{ tag }}" class="tag-section">
+            <h2>{{ tag }}</h2>
+            <ul>
+                {% for post in posts %}
+                <li>
+                    <time>{{ post.date }}</time>
+                    <a href="{{ post.url }}">{{ post.title }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

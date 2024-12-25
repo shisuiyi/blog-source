@@ -1,0 +1,15 @@
+site:
+  title: "师不语的个人博客"
+  description: "一个简洁的静态博客"
+  author: "师不语"
+  language: "zh-CN"
+
+style:
+  primary_color: "#333333"
+  background_color: "#ffffff"
+  font_family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial"
+
+social:
+  github: "https://github.com/shisuiyi"
+  email: "your.email@example.com"
+  rss: "/feed.xml"

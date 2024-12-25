@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.idea/
+
+# 生成的静态文件
+blog/public/
+
+# 系统文件
+.DS_Store
+Thumbs.db 

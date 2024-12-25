@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="{{ config.site.language }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ config.site.title }}{% endblock %}</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+    <link rel="stylesheet" href="/styles/main.css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- 抽屉菜单 -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="drawer" id="drawer">
+        <div class="drawer-header">
+            <div class="drawer-title">{{ config.site.title }}</div>
+            <button class="drawer-close" id="drawerClose">
+                <span class="material-icons-round">close</span>
+            </button>
+        </div>
+        <nav class="drawer-nav">
+            <a href="/" class="drawer-item {% if active_page == 'home' %}active{% endif %}">
+                <span class="drawer-icon material-icons-round">home</span>
+                <span class="drawer-text">首页</span>
+            </a>
+            <a href="/about.html" class="drawer-item {% if active_page == 'about' %}active{% endif %}">
+                <span class="drawer-icon material-icons-round">person</span>
+                <span class="drawer-text">关于</span>
+            </a>
+            <a href="/tags.html" class="drawer-item {% if active_page == 'tags' %}active{% endif %}">
+                <span class="drawer-icon material-icons-round">local_offer</span>
+                <span class="drawer-text">标签</span>
+            </a>
+        </nav>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <button class="menu-button" id="menuButton">
+                    <span class="material-icons-round">menu</span>
+                </button>
+                <div class="header-text">
+                    <h1><a href="/">{{ config.site.title }}</a></h1>
+                    <p>{{ config.site.description }}</p>
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <span class="material-icons-round light-icon">light_mode</span>
+                    <span class="material-icons-round dark-icon">dark_mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>关于博客</h3>
+                    <p>{{ config.site.description }}</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速导航</h3>
+                    <ul>
+                        <li><a href="/">首页</a></li>
+                        <li><a href="/about.html">关于</a></li>
+                        <li><a href="/tags.html">标签</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系方式</h3>
+                    <ul class="social-links">
+                        {% if config.social.github %}
+                        <li>
+                            <a href="{{ config.social.github }}" target="_blank" rel="noopener">
+                                <span class="material-icons-round">code</span>
+                                <span>GitHub</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if config.social.email %}
+                        <li>
+                            <a href="mailto:{{ config.social.email }}">
+                                <span class="material-icons-round">email</span>
+                                <span>Email</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if config.social.rss %}
+                        <li>
+                            <a href="{{ config.social.rss }}" target="_blank" rel="noopener">
+                                <span class="material-icons-round">rss_feed</span>
+                                <span>RSS</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {{ config.site.author }} - Built with Static Blog Generator</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 移动端导航栏 -->
+    <nav class="mobile-nav">
+        <a href="/" class="mobile-nav-item {% if active_page == 'home' %}active{% endif %}">
+            <span class="material-icons-round mobile-nav-icon">home</span>
+            <span>首页</span>
+        </a>
+        <a href="/tags.html" class="mobile-nav-item {% if active_page == 'tags' %}active{% endif %}">
+            <span class="material-icons-round mobile-nav-icon">local_offer</span>
+            <span>标签</span>
+        </a>
+        <a href="/about.html" class="mobile-nav-item {% if active_page == 'about' %}active{% endif %}">
+            <span class="material-icons-round mobile-nav-icon">person</span>
+            <span>关于</span>
+        </a>
+    </nav>
+
+    {% block scripts %}
+    <script>
+        // 抽屉菜单功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const drawer = document.getElementById('drawer');
+            const drawerOverlay = document.getElementById('drawerOverlay');
+            const menuButton = document.getElementById('menuButton');
+            const drawerClose = document.getElementById('drawerClose');
+
+            function openDrawer() {
+                drawer.classList.add('open');
+                drawerOverlay.classList.add('visible');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeDrawer() {
+                drawer.classList.remove('open');
+                drawerOverlay.classList.remove('visible');
+                document.body.style.overflow = '';
+            }
+
+            menuButton.addEventListener('click', openDrawer);
+            drawerClose.addEventListener('click', closeDrawer);
+            drawerOverlay.addEventListener('click', closeDrawer);
+        });
+
+        // 主题切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+            
+            // 从 localStorage 获取保存的主题
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else if (prefersDark.matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+            
+            // 更新按钮状态
+            function updateThemeToggle() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                themeToggle.classList.toggle('dark', currentTheme === 'dark');
+            }
+            
+            updateThemeToggle();
+            
+            // 切换主题
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeToggle();
+            });
+            
+            // 监听系统主题变化
+            prefersDark.addListener((e) => {
+                if (!localStorage.getItem('theme')) {
+                    document.documentElement.setAttribute(
+                        'data-theme',
+                        e.matches ? 'dark' : 'light'
+                    );
+                    updateThemeToggle();
+                }
+            });
+        });
+
+        // 代码块处理
+        document.querySelectorAll('.highlight').forEach(block => {
+            // 获取代码语言
+            const codeElement = block.querySelector('code');
+            let lang = 'text';
+            
+            // 尝试从代码元素的类名中获取语言
+            if (codeElement) {
+                // 调试日志
+                console.log('Code element:', codeElement);
+                console.log('Code classes:', codeElement.className);
+                
+                // 首先检查代码块的父元素是否有语言标识
+                const parentClasses = block.parentElement?.className.split(' ') || [];
+                for (const cls of parentClasses) {
+                    if (cls.startsWith('language-')) {
+                        lang = cls.replace('language-', '');
+                        break;
+                    }
+                }
+                
+                // 如果没找到，检查代码元素自身的类名
+                if (lang === 'text') {
+                    const classes = codeElement.className.split(' ');
+                    for (const cls of classes) {
+                        if (cls.startsWith('language-')) {
+                            lang = cls.replace('language-', '');
+                            break;
+                        }
+                    }
+                }
+                
+                // 如果还是没找到，尝试从代码内容判断
+                if (lang === 'text') {
+                    const content = codeElement.textContent.trim();
+                    // 检查是否包含 Python 特征
+                    if (
+                        content.includes('def ') || 
+                        content.includes('print(') ||
+                        content.includes('import ') ||
+                        /^#\s.*$/m.test(content) ||  // Python 风格的注释
+                        content.includes('class ') ||
+                        content.includes('return ') ||
+                        content.includes('True') ||
+                        content.includes('False') ||
+                        content.includes('None')
+                    ) {
+                        lang = 'python';
+                    }
+                }
+            }
+            
+            // 设置语言标识
+            block.setAttribute('data-lang', lang);
+            
+            // 创建复制按钮
+            const button = document.createElement('button');
+            button.className = 'copy-button';
+            button.textContent = '';
+            
+            // 添加复制功能
+            button.addEventListener('click', async () => {
+                const code = block.querySelector('pre').textContent;
+                try {
+                    await navigator.clipboard.writeText(code);
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy:', err);
+                }
+            });
+            
+            // 将按钮添加到代码块
+            block.appendChild(button);
+        });
+    </script>
+    {% endblock %}
+</body>
+</html> 

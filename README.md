@@ -70,14 +70,14 @@ chmod +x deploy.sh
 
 ### 日常更新
 
-1. 更新内容后，提交源代码（可选但推荐）
+1. 更新博客内容后，提交源代码到 blog-source 仓库：
 ```bash
 git add .
 git commit -m "更新说明"
 git push origin main
 ```
 
-2. 执行部署脚本
+2. 部署到 GitHub Pages：
 ```bash
 ./deploy.sh
 ```

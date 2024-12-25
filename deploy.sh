@@ -30,7 +30,7 @@ echo -e "${BLUE}提交更改...${NC}"
 timestamp=$(date "+%Y-%m-%d %H:%M:%S")
 git commit -m "Site updated: ${timestamp}"
 
-# 推送到 GitHub Pages 仓库（需要修改为你的仓库地址）
+# 推送到 GitHub Pages 仓库
 echo -e "${BLUE}推送到 GitHub...${NC}"
 git push -f git@github.com:shisuiyi/shisuiyi.github.io.git main
 

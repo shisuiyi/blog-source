@@ -35,35 +35,53 @@
         </aside>
 
         <div class="posts-list">
-            {% for post in posts %}
-            <article class="post-preview">
-                <div class="post-preview-container">
-                    {% if post.image %}
-                    <div class="post-preview-image">
-                        <img src="{{ post.image }}" alt="{{ post.title }}">
-                    </div>
-                    {% else %}
-                    <div class="post-preview-image">
-                        <div class="post-preview-image-placeholder">
-                            <span class="material-icons-round">article</span>
+            <div class="search-box">
+                <div class="search-input-group">
+                    <span class="material-icons-round search-icon">search</span>
+                    <input type="text" 
+                           class="search-input" 
+                           placeholder="搜索文章..." 
+                           id="searchInput">
+                    <select class="search-select" id="searchType">
+                        <option value="title">标题</option>
+                        <option value="content">内容</option>
+                        <option value="tag">标签</option>
+                    </select>
+                </div>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+
+            <div id="postsList">
+                {% for post in posts %}
+                <article class="post-preview">
+                    <div class="post-preview-container">
+                        {% if post.image %}
+                        <div class="post-preview-image">
+                            <img src="{{ post.image }}" alt="{{ post.title }}">
                         </div>
-                    </div>
-                    {% endif %}
-                    <div class="post-preview-content">
-                        <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
-                        <div class="post-meta">
-                            <time>{{ post.date }}</time>
-                            {% if post.read_time %}
-                            <span class="read-time">{{ post.read_time }} 分钟阅读</span>
+                        {% else %}
+                        <div class="post-preview-image">
+                            <div class="post-preview-image-placeholder">
+                                <span class="material-icons-round">article</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="post-preview-content">
+                            <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+                            <div class="post-meta">
+                                <time>{{ post.date }}</time>
+                                {% if post.read_time %}
+                                <span class="read-time">{{ post.read_time }} 分钟阅读</span>
+                                {% endif %}
+                            </div>
+                            {% if post.excerpt %}
+                            <p class="post-excerpt">{{ post.excerpt }}</p>
                             {% endif %}
                         </div>
-                        {% if post.excerpt %}
-                        <p class="post-excerpt">{{ post.excerpt }}</p>
-                        {% endif %}
                     </div>
-                </div>
-            </article>
-            {% endfor %}
+                </article>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>

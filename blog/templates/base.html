@@ -269,94 +269,62 @@
             const searchInput = document.getElementById('searchInput');
             const searchType = document.getElementById('searchType');
             const searchResults = document.getElementById('searchResults');
+            const postsList = document.getElementById('postsList');
             
-            // 如果不在搜索页面，直接返回
-            if (!searchInput || !searchType || !searchResults) {
-                return;
-            }
+            if (!searchInput) return;
+
+            let searchTimeout;
             
-            // 所有文章数据
-            const posts = [
-                {% for post in posts %}
-                {
-                    title: "{{ post.title }}",
-                    content: "{{ post.content | striptags | escape }}",
-                    excerpt: "{{ post.excerpt | escape }}",
-                    url: "{{ post.url }}",
-                    date: "{{ post.date }}",
-                    tags: [{% for tag in post.tags %}"{{ tag }}"{% if not loop.last %}, {% endif %}{% endfor %}]
-                }{% if not loop.last %},{% endif %}
-                {% endfor %}
-            ];
-
-            // 搜索函数
-            function search(query, type) {
-                query = query.toLowerCase();
-                if (!query) {
-                    searchResults.innerHTML = '';
-                    return;
-                }
-
-                const results = posts.filter(post => {
-                    switch (type) {
-                        case 'title':
-                            return post.title.toLowerCase().includes(query);
-                        case 'content':
-                            return post.content.toLowerCase().includes(query);
-                        case 'tags':
-                            return post.tags.some(tag => tag.toLowerCase().includes(query));
-                        default:
-                            return false;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
+                
+                searchTimeout = setTimeout(() => {
+                    if (query.length < 2) {
+                        searchResults.style.display = 'none';
+                        postsList.style.display = 'block';
+                        return;
                     }
-                });
-
-                if (results.length === 0) {
-                    searchResults.innerHTML = '<div class="no-results">没有找到相关文章</div>';
-                    return;
-                }
-
-                const html = results.map(post => `
-                    <div class="search-result">
-                        <h3><a href="${post.url}">${highlightText(post.title, query)}</a></h3>
-                        <div class="post-meta">
-                            <time>${post.date}</time>
-                        </div>
-                        <p>${highlightText(post.excerpt || post.content.slice(0, 200) + '...', query)}</p>
-                    </div>
-                `).join('');
-
-                searchResults.innerHTML = html;
-            }
-
-            // 高亮匹配文本
-            function highlightText(text, query) {
-                if (searchType.value !== 'tags') {
-                    const regex = new RegExp(`(${query})`, 'gi');
-                    return text.replace(regex, '<span class="highlight">$1</span>');
-                }
-                return text;
-            }
-
-            // 防抖函数
-            function debounce(func, wait) {
-                let timeout;
-                return function(...args) {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => func.apply(this, args), wait);
-                };
-            }
-
-            // 监听搜索输入
-            const debouncedSearch = debounce((query, type) => search(query, type), 300);
-            
-            searchInput.addEventListener('input', (e) => {
-                debouncedSearch(e.target.value, searchType.value);
+                    
+                    // 执行搜索
+                    const results = performSearch(query, searchType.value);
+                    displayResults(results);
+                }, 300);
             });
-
-            searchType.addEventListener('change', () => {
-                debouncedSearch(searchInput.value, searchType.value);
+            
+            // 点击外部关闭搜索结果
+            document.addEventListener('click', function(e) {
+                if (!searchResults.contains(e.target) && !searchInput.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                    postsList.style.display = 'block';
+                }
             });
         });
+
+        function performSearch(query, type) {
+            // 这里实现搜索逻辑
+            // 返回搜索结果数组
+        }
+
+        function displayResults(results) {
+            const searchResults = document.getElementById('searchResults');
+            const postsList = document.getElementById('postsList');
+            
+            if (results.length === 0) {
+                searchResults.innerHTML = '<div class="search-result-item">没有找到相关内容</div>';
+            } else {
+                searchResults.innerHTML = results.map(result => `
+                    <div class="search-result-item">
+                        <div class="search-result-title">${result.title}</div>
+                        <div class="search-result-meta">${result.date}</div>
+                        <div class="search-result-excerpt">${result.excerpt}</div>
+                    </div>
+                `).join('');
+            }
+            
+            searchResults.style.display = 'block';
+            postsList.style.display = 'none';
+        }
     </script>
     {% endblock %}
 </body>

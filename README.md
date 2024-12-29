@@ -17,6 +17,11 @@ blog/
 ├── templates/          # 模板文件
 ├── styles/            # CSS 样式文件
 ├── posts/             # Markdown 文章
+├── images/            # 图片资源
+│   ├── avatar/        # 头像图片
+│   ├── posts/         # 文章图片
+│   │   └── default/   # 默认图片
+│   └── site/          # 网站通用图片
 ├── public/            # 生成的静态文件
 └── static_blog_generator.py  # 生成器脚本
 ```
@@ -26,7 +31,7 @@ blog/
 ### 1. 环境准备
 ```bash
 # 安装依赖
-pip install pyyaml markdown pygments
+pip install pyyaml markdown pygments requests
 
 # 配置 Git
 git config --global user.name "shisuiyi"
@@ -42,6 +47,30 @@ cd blog-source
 # 给部署脚本添加执行权限
 chmod +x deploy.sh
 ```
+
+## 图片管理
+
+图片文件存放在 `blog/images/` 目录下，分为以下类别：
+
+- `avatar/`: 存放头像图片
+- `posts/`: 存放文章相关图片
+  - `default/`: 默认图片
+  - `文章名/`: 每篇文章的图片单独存放
+- `site/`: 存放网站通用图片（如 favicon）
+
+### 使用方法
+
+1. 头像：
+   - 将头像图片保存为 `blog/images/avatar/avatar.jpg`
+   - 在 `config.yaml` 中配置 `avatar` 路径
+
+2. 文章图片：
+   - 创建文章同名目录：`blog/images/posts/文章名/`
+   - 在文章中使用相对路径引用：`![描述](/images/posts/文章名/图片名)`
+
+3. 默认图片：
+   - 默认文章封面：`/images/posts/default/default.jpg`
+   - 网站图标：`/images/site/favicon.ico`
 
 ## 写作指南
 

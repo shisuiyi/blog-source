@@ -43,7 +43,7 @@ def hello_world():
 
 ### 5. 图片示例
 
-![示例图片](https://shisuiyi.github.io/post-images/opCBZxlZA.jpg){: .large}
+![示例图片](/images/posts/default/default.jpg){: .large}
 
 ## 总结
 

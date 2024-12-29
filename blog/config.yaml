@@ -3,13 +3,20 @@ site:
   description: "一个简洁的静态博客"
   author: "师不语"
   language: "zh-CN"
+  avatar: "/images/avatar/avatar.jpg"
+  bio: "热爱编程，热爱生活。专注于Python、Web开发和人工智能。分享技术经验和个人感悟。"
+  social:
+    github:
+      icon: "code"
+      url: "https://github.com/shisuiyi"
+    email:
+      icon: "email"
+      url: "mailto:your.email@example.com"
+    rss:
+      icon: "rss_feed"
+      url: "/feed.xml"
 
 style:
   primary_color: "#333333"
   background_color: "#ffffff"
   font_family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial"
-
-social:
-  github: "https://github.com/shisuiyi"
-  email: "your.email@example.com"
-  rss: "/feed.xml"

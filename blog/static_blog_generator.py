@@ -170,6 +170,7 @@ class BlogGenerator:
         return dict(sorted(tags.items()))
     
     def generate_site(self):
+        """生成整个站点"""
         # 确保public目录存在并清空
         public_dir = os.path.join(self.base_dir, 'public')
         print(f"Creating public directory: {public_dir}")  # 调试信息
@@ -190,6 +191,12 @@ class BlogGenerator:
             
         shutil.copytree(styles_dir, public_styles_dir)
         
+        # 复制图片文件夹
+        images_dir = os.path.join(self.base_dir, 'images')
+        if os.path.exists(images_dir):
+            public_images_dir = os.path.join(public_dir, 'images')
+            shutil.copytree(images_dir, public_images_dir)
+        
         # 生成文章页面
         posts = self._get_posts()
         print(f"Found {len(posts)} posts")  # 调试信息
@@ -208,20 +215,24 @@ class BlogGenerator:
             with open(output_file, 'w', encoding='utf-8') as f:
                 f.write(output)
         
+        # 获取所有标签
+        tags = self._get_tags(posts)
+        tags_count = len(tags)  # 获取标签总数
+        
         # 生成首页
-        index_file = os.path.join(public_dir, 'index.html')
-        print(f"Generating index: {index_file}")  # 调试信息
         index_template = self.env.get_template('index.html')
+        index_file = os.path.join(public_dir, 'index.html')
         output = index_template.render(
-            posts=posts, 
+            posts=posts,
             config=self.config,
-            active_page='home'
+            active_page='home',
+            tags=tags,  # 传递标签数据
+            tags_count=tags_count  # 传递标签数量
         )
         with open(index_file, 'w', encoding='utf-8') as f:
             f.write(output)
         
         # 生成标签页
-        tags = self._get_tags(posts)
         tags_template = self.env.get_template('tags.html')
         tags_file = os.path.join(public_dir, 'tags.html')
         output = tags_template.render(

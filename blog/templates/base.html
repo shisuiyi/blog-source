@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ config.site.language }}">
+<html lang="{{ config.site.language|default('zh-CN') }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,22 +52,7 @@
         </div>
     </header>
     
-    <main class="container">
-        {% if active_page == 'home' %}
-        <!-- 搜索框部分 -->
-        <div class="search-box">
-            <div class="search-input-group">
-                <span class="material-icons-round search-icon">search</span>
-                <input type="text" class="search-input" placeholder="搜索文章..." id="searchInput">
-                <select class="search-select" id="searchType">
-                    <option value="title">标题</option>
-                    <option value="content">内容</option>
-                    <option value="tags">标签</option>
-                </select>
-            </div>
-            <div class="search-results" id="searchResults"></div>
-        </div>
-        {% endif %}
+    <main>
         {% block content %}{% endblock %}
     </main>
     

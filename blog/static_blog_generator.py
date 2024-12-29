@@ -247,18 +247,20 @@ class BlogGenerator:
         about_template = self.env.get_template('about.html')
         about_file = os.path.join(public_dir, 'about.html')
         about_content = ''
-        about_md_file = os.path.join(self.base_dir, 'about.md')
-        if os.path.exists(about_md_file):
-            with open(about_md_file, 'r', encoding='utf-8') as f:
-                content = f.read()
-                html, _, _ = self._convert_markdown(content)
-                about_content = html
+        about_path = os.path.join(self.base_dir, 'posts', 'about.md')
+        if os.path.exists(about_path):
+            with open(about_path, 'r', encoding='utf-8') as f:
+                about_content = f.read()
+                about_content = markdown.markdown(about_content)
         
         output = about_template.render(
             content=about_content,
             config=self.config,
-            active_page='about'
+            active_page='about',
+            posts=posts,  # 添加文章数据
+            tags=tags     # 添加标签数据
         )
+        
         with open(about_file, 'w', encoding='utf-8') as f:
             f.write(output)
 

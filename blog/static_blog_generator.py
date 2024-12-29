@@ -248,17 +248,20 @@ class BlogGenerator:
         about_file = os.path.join(public_dir, 'about.html')
         about_content = ''
         about_path = os.path.join(self.base_dir, 'posts', 'about.md')
+        
         if os.path.exists(about_path):
             with open(about_path, 'r', encoding='utf-8') as f:
-                about_content = f.read()
-                about_content = markdown.markdown(about_content)
+                content = f.read()
+                # 使用 _convert_markdown 方法处理内容
+                html_content, _, _ = self._convert_markdown(content)
+                about_content = html_content
         
         output = about_template.render(
             content=about_content,
             config=self.config,
             active_page='about',
-            posts=posts,  # 添加文章数据
-            tags=tags     # 添加标签数据
+            posts=posts,  # 为了显示文章数量
+            tags=tags     # 为了显示标签数量
         )
         
         with open(about_file, 'w', encoding='utf-8') as f:

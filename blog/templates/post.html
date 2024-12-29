@@ -11,17 +11,41 @@
     </aside>
     {% endif %}
     
-    <article class="post">
-        <h1>{{ post.title }}</h1>
-        <div class="post-meta">
-            <time>{{ post.date }}</time>
-        </div>
-        
-        <div class="post-content">
-            {% if post.content %}
-            {{ post.content|replace('<div class="post-toc">.*?</div>', '', 1)|safe }}
+    <div class="post-container">
+        <article class="post">
+            <h1>{{ post.title }}</h1>
+            <div class="post-meta">
+                <time>{{ post.date }}</time>
+            </div>
+            
+            <div class="post-content">
+                {% if post.content %}
+                {{ post.content|replace('<div class="post-toc">.*?</div>', '', 1)|safe }}
+                {% endif %}
+            </div>
+        </article>
+
+        <div class="post-navigation">
+            {% if prev_post %}
+            <a href="{{ prev_post.url }}" class="nav-item prev">
+                <div class="nav-arrow">
+                    <span class="material-icons-round">arrow_back</span>
+                    <span class="nav-text">上一篇</span>
+                </div>
+                <div class="nav-title">{{ prev_post.title }}</div>
+            </a>
+            {% endif %}
+            
+            {% if next_post %}
+            <a href="{{ next_post.url }}" class="nav-item next">
+                <div class="nav-arrow">
+                    <span class="nav-text">下一篇</span>
+                    <span class="material-icons-round">arrow_forward</span>
+                </div>
+                <div class="nav-title">{{ next_post.title }}</div>
+            </a>
             {% endif %}
         </div>
-    </article>
+    </div>
 </div>
 {% endblock %} 

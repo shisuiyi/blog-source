@@ -203,14 +203,18 @@ class BlogGenerator:
         
         post_template = self.env.get_template('post.html')
         
-        for post in posts:
+        for i, post in enumerate(posts):
+            # 添加上一篇和下一篇文章的信息
+            prev_post = posts[i + 1] if i + 1 < len(posts) else None
+            next_post = posts[i - 1] if i > 0 else None
+            
             output_file = os.path.join(public_dir, post['url'])
-            print(f"Generating post: {output_file}")  # 调试信息
-            # 简化渲染方式
             output = post_template.render(
-                post=post, 
+                post=post,
                 config=self.config,
-                active_page='post'
+                active_page='post',
+                prev_post=prev_post,  # 添加上一篇文章
+                next_post=next_post   # 添加下一篇文章
             )
             with open(output_file, 'w', encoding='utf-8') as f:
                 f.write(output)

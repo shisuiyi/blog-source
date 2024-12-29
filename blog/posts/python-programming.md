@@ -4,8 +4,6 @@ date: 2024-03-21
 tags: python,编程,教程
 ---
 
-# Python编程入门指南
-
 Python 是一门优雅、简洁且功能强大的编程语言。本文将介绍 Python 的基础知识和一些实用技巧。
 
 ## 为什么选择 Python？

@@ -221,12 +221,26 @@
                 // 如果还是没找到，尝试从代码内容判断
                 if (lang === 'text') {
                     const content = codeElement.textContent.trim();
-                    // 检查是否包含 Python 特征
+
+                    // C++特征检测（优先）
                     if (
-                        content.includes('def ') || 
+                        content.includes('#include') ||
+                        content.includes('using namespace') ||
+                        content.includes('std::') ||
+                        content.includes(' class ') ||
+                        content.includes(' struct ') ||
+                        content.includes('template<') ||
+                        content.includes('//') ||
+                        content.includes('/*')
+                    ) {
+                        lang = 'cpp';
+                    }
+                    // Python特征检测
+                    else if (
+                        content.includes('def ') ||
                         content.includes('print(') ||
                         content.includes('import ') ||
-                        /^#\s.*$/m.test(content) ||  // Python 风格的注释
+                        /^#\s.*$/m.test(content) ||
                         content.includes('class ') ||
                         content.includes('return ') ||
                         content.includes('True') ||
@@ -235,6 +249,7 @@
                     ) {
                         lang = 'python';
                     }
+                    // 添加其他语言检测...
                 }
             }
             
